@@ -1,0 +1,140 @@
+65537: guess number (can't do this since num > 4 bytes long)
+101: test luck
+102: bof
+103: quit
+
+fixed srand
+101
+A
+-
+3624065002
+2069054273
+
+101
+A
+-
+3363193643
+2069054273
+
+the guess luck thing doesnt rly give anything lol
+
+local_130 is just rbp-0x130
+earlier define, appear later
+
+0x7fffffffe150: 0xcafebabedeadbeef      0x794279421337c0d3
+0x7fffffffe160: 0x4141414141414141      0x00000a4141414141
+0x7fffffffe170: 0x0000000000000000      0x0000000000000000
+0x7fffffffe180: 0x0000000000000000      0x0000000000000000
+0x7fffffffe190: 0x0000000000000000      0x0000000000000000
+0x7fffffffe1a0: 0x0000000000000000      0x0000000000000000
+0x7fffffffe1b0: 0x0000000000000000      0x0000000000000000
+0x7fffffffe1c0: 0x0000000000000000      0x0000000000000000
+0x7fffffffe1d0: 0x0000000000000000      0x0000000000000000
+0x7fffffffe1e0: 0x0000000000000000      0x0000000000000000
+0x7fffffffe1f0: 0x0000000000000000      0x0000000000000000
+0x7fffffffe200: 0x0000000000000000      0x0000000000000000
+0x7fffffffe210: 0x0000000000000000      0x0000000000000000
+0x7fffffffe220: 0x0000000000000000      0x0000000000000000
+0x7fffffffe230: 0x0000000000000000      0x0000000000000000
+0x7fffffffe240: 0x0000000000000000      0x0000000000000000
+0x7fffffffe250: 0x0000000000000000      0x0000000000000000
+0x7fffffffe260: 0x0000000000000000      0x33d2cc2a974f9600
+
+
+local_130 = local_128[((local_130 & 0xff) - 0x41)];
+
+printf("%d is wrong choice.\n",(ulong)local_134);
+
+it prints a long
+    
+local_135: 0x7fffffffe143: +-*/ ascii
+
+local_134 is at 0x7fffffffe144
+local_130 is at 0x7fffffffe148
+local_12c is at 0x7fffffffe14c (+-*/ by how much)
+local_128 is at 0x7fffffffe150
+
+0x7fffffffe144: 0xdeadbeeffffffffc      0xdeadbeef00000000
+0x7fffffffe154: 0x1337c0d3cafebabe      0x0000000079427942
+
+maybe guessed_num() is called to put canary on top so can index it using negative indexes
+
+local:
+101
+A
+-
+2125076608
+0
+
+
+idea:
+brute/compare 1 byte at a time
+get 4 bytes, use multiplication to isolate the byte,
+then next iteration get back the same bytes, and add/minus that according to the rands
+1/256 chance of working for each byte
+
+
+have to minus the ord('?') since
+__isoc99_scanf(&%c,&local_130)
+so the ? is written into there
+
+so need around 256*7 tries to leak canary
+
+
+nice idea
+
+
+send "?" to get back og thing
+
+
+
+patched flagstr in local file from "/home/acs_ctf/flag" to "./deploy/abcd/flag"
+
+
+
+
+0x1111b7
+
+
+find when set 
+so same len and dont mess up addresses
+
+
+if after 500 tries also doesn't work, it means that its >0x7f
+
+
+got another way, just make it the 2nd msb
+
+
+0x108 padding
+
+
+the "you are on the right way" is a sigsegv handler im pretty sure
+
+just dk why it was triggered when one gadget is ran jsut now
+idk, prob cauase the gadget didnt work / constraints didnt fully meet or smthg idk
+
+
+
+to make it faster
+instead of bruting one full byte, brute half bytes
+suddenly realised this when discussing with organisers abt the speed
+
+instead of 1/256
+cut to 1/16
+
+
+hv to know init state to be able to calculate correctly the offsets
+
+
+4 bytes aren't fast enough
+
+I CAN BRUTE BITSSSSSS
+BRUTE BITS ARE CERTAIN RIGHT OR WRONG, NO LUCK INVOLVED
+
+
+GOT FLAGGGGGGGGG, NICEEEEEEEEEEEEEEEEEEEEEEEEEEEEeee
+
+
+wrote like 3-4 versions of the exploit, spent so much time on this. ~12h mcm idk not sure
+lets gooooooo

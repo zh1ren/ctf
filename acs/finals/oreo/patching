@@ -1,0 +1,93 @@
+in error_log, patch 
+printf(param_1) to puts(param_1)
+
+sla checks if "%p" is actually outputted, so have to do this, can't just evade the puts
+plus the size of the binary won't change, so the binary offsets etc (rip+0x...) won't be affected
+
+to change it, have to change the bytes at 0x14f9 from
+fffffc92e8 to ffffc62e8
+
+the e8 is the opcode for a relative call (I think)
+and the rest is just the relative offset from source to dest
+
+so rip = rip + diff
+diff = after-before
+
+so diff = puts@plt-(vuln printf call+5), 
++5 cause the whole instr is 5 bytes, so the rip will +5 afterwards
+
+0x555555555160-(0x00005555555554f9+5) = -926,
+which is the same as 0xfffffc62
+
+
+
+the sla says that there's also a bof
+its at mine():
+__isoc99_scanf("%[^\n]%*c",&quiz);
+
+so just change "%*c" to "%8c"
+
+so change bytes at
+0x20db to 0x38
+
+patching it to %7c just infinite loops the program
+
+
+oo that means can exploit using bof also wow
+
+idh to patch the read
+i just have to patch the strncpy
+
+the bug is at, when answer is large, strlen returns large value, and strncpy copies many bytes
+
+
+        1781 e8 ea f9        CALL       strlen      
+        1786 89 45 ec        MOV        dword ptr [RBP + local_1c],EAX
+        1789 8b 45 ec        MOV        EAX,dword ptr [RBP + local_1c]
+        178c 48 63 d0        MOVSXD     RDX,EAX
+        178f 8b 45 e8        MOV        EAX,dword ptr [RBP + local_20]
+        1792 48 98           CDQE
+        1794 48 8d 0c        LEA        RCX,[RAX*0x8]
+             c5 00 00
+             00 00
+        179c 48 8d 05        LEA        RAX,[answer]         
+             9d 28 00 00
+        17a3 48 01 c1        ADD        RCX,RAX
+        17a6 48 8d 45 f0     LEA        RAX=>local_18,[RBP + -0x10]
+        17aa 48 89 ce        MOV        RSI,RCX
+        17ad 48 89 c7        MOV        RDI,RAX
+        17b0 e8 9b f9        CALL       strncpy 
+
+
+the whole 0x1789 - 0x178c part can be changed to 
+mov edx,8
+and just nops
+
+so
+1789: ba 08 00 00 00 90
+
+also, this wya input is received, just not copy over
+wont cause like halts etc if too few bytes read
+
+nvm that doesnt work, since
+local_18[(int)sVar4] = '\0';
+messes up the canary
+
+so what if we just do
+mov al,8      // since this will clear the other bytes besides the LSB also
+MOV        dword ptr [RBP + local_1c],EAX
+MOVSXD     RDX,EAX
+
+ya lets do that
+
+        1786 89 45 ec        MOV        dword ptr [RBP + local_1c],EAX
+        1789 8b 45 ec        MOV        EAX,dword ptr [RBP + local_1c]
+        178c 48 63 d0        MOVSXD     RDX,EAX
+
+
+ok nice sla_check is passed
+
+
+patches:
+14f9: e8 62
+1786: b0 08 90 89 45 ec 48 63 d0

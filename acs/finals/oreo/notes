@@ -1,0 +1,45 @@
+oreo: operation
+oreo+0x20: ??
+oreo+0x28: Os
+oreo+0x2c: REs
+oreo+0x30: money
+
+initially: 
+20 Os
+10 REs
+0 money
+
+market:
+1 -> 1$
+2 Os
+1 REs
+minus money
+
+mine:
+guess to get money
+
+
+parsing:
+printf vuln
+
+just o..., re to get ...
+
+
+there is a win function
+
+%6$p to leak top of stack
+
+%11$p to leak parsing+378
+11$ to access ret
+
+just have to overwrite last two bytes of ret to win
+
+
+%10$p to leak stack/rbp
+
+leak stack and pie, then write stack addr somewhere, then overwrite ret
+
+22$ to access own
+%11$hn
+
+

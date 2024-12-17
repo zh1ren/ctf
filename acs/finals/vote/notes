@@ -1,0 +1,152 @@
+global ctf_arr = 0x55555555c2c0
+one obj is 0x958 bytes
+
+there is a func arr on the top of each ctf
+
+add_ctf:
+31 bytes read into name
+then they use "<<" to read input 
+then create a cpp string using that
+
+width and height max 0x2f
+negative width and height for negative read
+read(0,pvVar3,(long)((int)height * (int)width));
+
+
+0x55555556eea0: 0x0000000000000000      0x0000000000000961
+0x55555556eeb0: 0x000055555555bc80      0x0000000100000000 <- votes, +0xc:? topics n?
+0x55555556eec0: 0x0018001800000000      0x4141414141414141
+0x55555556eed0: 0x0000000000000000      0x0000000000000000
+0x55555556eee0: 0x0000000000000000      0x000000000a333231
+
+
+obj:
+&funcptr
+votes
+photo boolean prob
+?
+width
+height
+name
+photo
+
+topics are useless mcm
+
+
+  lVar1 = FUN_001034ba(param_1);
+  if (lVar1 != 0x1337133713371337) {
+    *(long *)(param_1 + 0x938) = lVar1;
+  }
+
+use this to overwrite ptr?
+this is a check
+
+
+go through each pixel, and width and height has to be >-1 (not sure if correct check)
+then local_10 chg through pixel
+
+if its 1, then it'll be *
+
+
+
+negative num cause error?
+hv to change the byte correctly?
+
+
+its executed when u exit
+
+i think u just overflow that
+
+no uaf
+
+in the top of the object, there is a global address there,
+0x000055555556eeb0│+0x0000: 0x000055555555bc80  →  0x0000555555558522  →   endbr64 
+0x000055555556eeb8│+0x0008: 0x0000000100000000
+0x000055555556eec0│+0x0010: 0x0010001000000000
+
+
+exploit plan:
+-1 overflow, make it so that it passes the checks, overwrite the name funcptr of next func
+leak libc, one_gadget
+
+problem now is just:
+how to overflow without triggering error
+how to leak
+
+
+a value is set at obj+0x938
+
+0x55555556f7e8
+
+the checks for >-1 are signed, so if you have negative num, then won't pass it
+
+
+if not 0x1337133713371337, then set the thing
+we can just set it ourselves to bypass
+
+
+photo is read using read()
+why did it crash?
+
+
+cant negative both width and height, since -*-=+
+
+
+even if read only accepts <=0x7fffffff bytes, its fine, since we can use --+,
+it'll still pass the checks
+
+
+th
+e uVar2 & 0xffffffffffffff00 will be false
+
+but just make 
+(uVar1 == uVar2); true
+
+
+
+cause of the newline byte?
+
+
+%s, will it fail?
+
+need to leak libc
+
+topics are stored in heap, might need to use thos
+when you delete it, they are freed too
+nice can leak libc using this
+i don't rly need pie, just need libc
+
+wait no just use the big objs to do this
+
+0x960 no tcache, straight go into heap chunk
+
+
+0x7fff works, 0x10000 no work? not sure
+
+unsorted bin FIFO?
+
+
+object+0x940 is where the topic pointers are, just use those to leak libc
+no need overwrite so much
+
+
+
+0x000055555556f7f0│+0x0940: 0x000055555556f890  →  0x000055555556f8a0  →  0x0000000042424242 ("BBBB"?)
+0x000055555556f7f8│+0x0948: 0x000055555556f8f0  →  0x0000000000000000
+0x000055555556f800│+0x0950: 0x000055555556f910  →  0x0000000000000000
+
+
+
+0x55555556f7f0: 0x000055555556f810      0x000055555556f830 <- is this end ptr?
+
+
+cant free the chunk that we corrupt topic/cppstr ptr
+
+
+**ptr
+
+
+overwrite exit handlers
+
+
+leak pointer guard, overwrite exit

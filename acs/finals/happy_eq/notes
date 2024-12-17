@@ -1,0 +1,29 @@
+enc1-enc16 can be reversed using just z3 prob
+in -> enc1 -> out
+find in
+
+enc18: split array into rows
+enc19: sum of all elements in the array
+
+
+enc17: [A[0][0]*d[0][0] + A[0][1]*d[0][1] + A[0][2]*d[0][2] + A[0][3]*d[0][3],
+        A[0][0]*d[1][0] + A[0][1]*d[1][1] + ...
+        ...
+        ...,
+        A[1][0]*d[0][0] + A[1][1]*d[0][1] + A[1][2]*d[0][2] +...
+        ...
+]
+
+everything & 0xff
+
+
+just hv to reverse the steps
+
+reversing enc17: just have to get back A
+
+z3 lets you write forward, and it solves backwardif all operations done &0xff, its all just mod 256 right, so I can just set them as bytes since its still the same ans after?
+if all operations done &0xff, its all just mod 256 right, so I can just set them as bytes since its still the same ans after?
+
+
+a1*
+a1*

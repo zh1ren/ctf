@@ -1,0 +1,20 @@
+its an 1024 bit prime, so the MSB is 1 right
+
+so the loop will run 1024 times
+
+if lsb of s3 is 1:
+result = (result+s1) mod s2
+
+no matter what:
+s1 = 2s1 mod 2**1024
+
+
+output:
+(result+s4) mod s2
+
+
+
+say we have n bits, and ith bit etc
+
+result = sum of ith 
+
