@@ -150,3 +150,15 @@ overwrite exit handlers
 
 
 leak pointer guard, overwrite exit
+
+
+
+
+
+maybe changing the libc changed the behaviour? idk
+maybe not
+
+
+byte 0b for some reason
+
+movaps issue
